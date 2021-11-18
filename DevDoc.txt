@@ -1,0 +1,49 @@
+3D Tower Defense Game
+======================
+
+- Perlin Noise Generated Terrain Map
+
+- Within generated Terrain Map find suitable places for Main Base Complex that needs to be defended.
+- Randomly choose a spot from these found places and place the complex
+
+- Attackers can attack from any angle from the Main Base Complex, They will spawn in and run to attack the Base from the max distance 
+  across the map.  The map is continuous from all directions, the Perlin Noise will create a continuous circular terrain that will appear
+  wrapped.
+  
+- A path follow will need to be figured out they will follow around the terrain to attack the main complex
+
+- If they are attacked and terrain allows maybe have them attack the defense turrets
+
+- How to earn coin to make defenses
+	- Time
+    - Attacker killed
+    - Wave rewards
+    
+- Turrets
+ 	- maybe some towers reduce health as they attack when health out tower is destroyed
+ 	
+	- simple gun tower
+	- tesla tower
+	- missle tower
+	- flame thrower tower
+
+- walls
+
+- traps
+	- unnoticable by attackers, and disappear when triggered and damage dealt
+	
+- attackers
+	- different speeds and types
+	- wave bosses
+	- complex rushers and defense attackers 
+	- ground and air based attacks
+	
+- controls
+	- WASD(device edges) camera scroll around
+	- mouse(screen tap) for panel selections and placement locations
+		
+- Wave progression
+	- each way will add more spawn points and more attackers
+	- each way will have a boss at the end that needs to be killed to trigger next wave
+	
+		

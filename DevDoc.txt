@@ -18,32 +18,81 @@
 	- Time
     - Attacker killed
     - Wave rewards
+
+-  main complex (attackers target)
+	- has hitpoints
+	- can be upgraded between scenes (groups of attacker waves)
     
 - Turrets
  	- maybe some towers reduce health as they attack when health out tower is destroyed
  	
-	- simple gun tower
-	- tesla tower
-	- missle tower
-	- flame thrower tower
+	- simple gun tower (low damage, moderate range, fast shots)
+	- tesla tower (high damage, low range, slow shots)
+	- missle tower (moderate damage, long range, moderate shots)
+	- flame thrower tower (moderate damage, low range, continuous damage)
+		- trains attack on single target until out of range or dead
+	- outposts (moderate damage, moderate range, moderate attack rate)
+		- military units are made and deployed form these structures to intercept incoming attackers and block their progress
+	- traps (low-high damage, low range, singl use)
+		- land mine
+			- AOE
+			- moderate damage to most, high damage to unarmored
+		- spike traps	
+			- single target
+			- innefective to armored targets
+			- high damage
+		- emp traps
+			- no damage
+			- single target
+			- disables some targets for long periods of Time
+		- gas traps
+			- aoe, dot
+			- immobilizes unarmored for moderate periods of Time
+			- low damage
+			
+	
+	- upgradeable towers
+	
+	- Basic tower stats
+		- attack rate
+		- range (radius)
+		
 
 - walls
-
-- traps
-	- unnoticable by attackers, and disappear when triggered and damage dealt
 	
 - attackers
 	- different speeds and types
 	- wave bosses
 	- complex rushers and defense attackers 
 	- ground and air based attacks
+
+	- attacker stats
+		- hit points
+		- attack rate
+		- movement speed
 	
 - controls
 	- WASD(device edges) camera scroll around
 	- mouse(screen tap) for panel selections and placement locations
+
+- Scene progression
+	- stats
+		- number of waves
+		- number of attacker spawn points
+		- spawn point respawn timer
+		- attacker units from spawn point per wave
+			- types
+			- how many of each types
+			- order of realase from spawn point
+			- how many released per time increment from respawn timer start
+
 		
 - Wave progression
 	- each way will add more spawn points and more attackers
 	- each way will have a boss at the end that needs to be killed to trigger next wave
+
+	- attackers from a spawn point will find a path to follow and stick to the attack path for the current scenes
+		- this will allow the palyer to strategize once they figure out the path
+
 	
 		

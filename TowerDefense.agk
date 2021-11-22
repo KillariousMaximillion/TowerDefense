@@ -49,9 +49,11 @@ output_path=
 
 [projectfiles]
 FILE_0=main.agc;-1
+FILE_1=TerrainGenerator.agc;-1
 
 [files]
-FILE_NAME_0=1;main.agc;21;0
+FILE_NAME_0=1;main.agc;33;0
+FILE_NAME_1=0;TerrainGenerator.agc;30;1
 
 [watchvariables]
 

@@ -1,6 +1,7 @@
-
 // Project: TowerDefense 
 // Created: 21-11-17
+
+#include "TerrainGenerator.agc"
 
 // show all errors
 
@@ -18,7 +19,19 @@ SetSyncRate( 30, 0 ) // 30fps instead of 60 to save battery
 SetScissor( 0,0,0,0 ) // use the maximum available screen space, no black borders
 UseNewDefaultFonts( 1 )
 
+// game initializers
+Init1DSeeds()
+CreatePerlinNoise1DArray(1024, 7)
+
+// game loop
 do
+	DrawNoiseArray1D()
     Print( ScreenFPS() )
     Sync()
 loop
+
+function DrawNoiseArray1D()
+	for i = 1 to 1024
+		DrawLine(i, 768, i, 768-(perlinNoise1D[i]*768), 255, 255, 0)
+	next i
+endfunction

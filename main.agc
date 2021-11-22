@@ -4,7 +4,6 @@
 #include "TerrainGenerator.agc"
 
 // show all errors
-
 SetErrorMode(2)
 
 // set window properties
@@ -20,21 +19,15 @@ SetScissor( 0,0,0,0 ) // use the maximum available screen space, no black border
 UseNewDefaultFonts( 1 )
 
 // game initializers
-global octive as integer = 1
+global terrainWidth as integer = 1024  // resolution width of terrain
 Init1DSeeds()
-CreatePerlinNoise1DArray(1024, octive)
+CreatePerlinNoise1DArray(terrainWidth)
 
 // game loop
 do
-	if GetRawKeyPressed(79) // O key
-	  inc octive
-	  if octive > 10
-	  	octive = 1
-	  endif
-      CreatePerlinNoise1DArray(1024, octive)
-    elseif GetRawKeyPressed(90) // Z key
+    if GetRawKeyPressed(90) // Z key
       Init1DSeeds()
-      CreatePerlinNoise1DArray(1024, octive)
+      CreatePerlinNoise1DArray(terrainWidth)
     endif
 	DrawNoiseArray1D()
     Print( ScreenFPS() )
@@ -42,7 +35,7 @@ do
 loop
 
 function DrawNoiseArray1D()
-	for i = 0 to 1024
+	for i = 0 to terrainWidth
 		DrawLine(i, 768/2, i, (768-(perlinNoise1D[i]*768))/2, 255, 255, 0)
 	next i
 endfunction

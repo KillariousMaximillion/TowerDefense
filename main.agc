@@ -20,18 +20,29 @@ SetScissor( 0,0,0,0 ) // use the maximum available screen space, no black border
 UseNewDefaultFonts( 1 )
 
 // game initializers
+global octive as integer = 1
 Init1DSeeds()
-CreatePerlinNoise1DArray(1024, 7)
+CreatePerlinNoise1DArray(1024, octive)
 
 // game loop
 do
+	if GetRawKeyPressed(79) // O key
+	  inc octive
+	  if octive > 10
+	  	octive = 1
+	  endif
+      CreatePerlinNoise1DArray(1024, octive)
+    elseif GetRawKeyPressed(90) // Z key
+      Init1DSeeds()
+      CreatePerlinNoise1DArray(1024, octive)
+    endif
 	DrawNoiseArray1D()
     Print( ScreenFPS() )
     Sync()
 loop
 
 function DrawNoiseArray1D()
-	for i = 1 to 1024
-		DrawLine(i, 768, i, 768-(perlinNoise1D[i]*768), 255, 255, 0)
+	for i = 0 to 1024
+		DrawLine(i, 768/2, i, (768-(perlinNoise1D[i]*768))/2, 255, 255, 0)
 	next i
 endfunction

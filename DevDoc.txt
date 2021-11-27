@@ -70,6 +70,28 @@
 		- hit points
 		- attack rate
 		- movement speed
+		- terrain Limiter 1-10
+
+	- need to theme the attackers so they fit to a story
+	- alien foot troops
+	- alien tanks
+	- alien dog like creatures
+	- alien snake like creatures
+	- alien spider like creatures
+
+- terrain
+	- auto generated useing perlin noise 2d algorithm to make greyscale height map later to be read into AGK as terrain
+	
+	- gridded search algorithm
+		- used for mob movement to figure out best path to target from source
+		- each equally gridded square in the terrain map will have a value associated with gradient which will determine
+			if mobs can move over that gradient of land 1-10 value
+		- 0 is a reserved gradient meant for water and water traversing mobs only 
+		- these gridded pieces will be nodes and each will be connected to neighboring with paths
+				nodes up, down, left, right, upperleft, lower right, upper right, lower left.
+		- a path will be disabled if a mob terrain limiter is above terrain value for that mob type for that source
+		- after all paths are removed starting from source path to target using simple shortest path alogrithms most likely
+			a verient of Dijkstra's A* algorithm
 	
 - controls
 	- WASD(device edges) camera scroll around

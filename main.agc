@@ -18,79 +18,76 @@ SetSyncRate( 30, 0 ) // 30fps instead of 60 to save battery
 SetScissor( 0,0,0,0 ) // use the maximum available screen space, no black borders
 UseNewDefaultFonts( 1 )
 
+SetShadowMappingMode(2)
+SetShadowRange(-1)
+SetShadowBias(0.0001)
+
+SetSunActive(1)
+SetSunColor(255, 200, 200)
+//SetSunDirection(-0.785398, -0.785398, 0.90) 
+SetSunDirection(-0.45, -0.45, 0.90) 
+
 // game initializers
-terrainWidth as integer = 600  // resolution width of terrain
-terrainHeight as integer = 600 // resolution height of terrain
+#constant terrainWidth = 100  // resolution width of terrain
+#constant terrainDepth = 100  // resolution depth(into screen) of terrain
+//#constant terrainHeight = 100 // resolutions height of terrain
+#constant terrainSplit = 5 // the split of terrain in segmented planes
+
+// TODO: this arraay is to big for 100x100 make smaller 
+#constant terrainSplitArrayLength = 360000//14440 //(terrainWidth / terrainSplit) * (terrainHeight / terrainSplit)
 terrainBias as float = 0.75  // greater then 2.0 = smoother, lower then 2.0 = rougher
+
+#constant PI = 3.1415926535897
 
 //Init1DSeeds(terrainWidth)
 //CreatePerlinNoise1DArray(terrainWidth, terrainBias)
-Init2DSeeds(terrainWidth, terrainHeight)
-CreatePerlinNoise2DArray(terrainWidth, terrainWidth, terrainBias)
+Init2DSeeds(terrainWidth, terrainDepth)
+CreatePerlinNoise2DArray(terrainWidth, terrainDepth, terrainBias)
 
-//CreateRenderImage(100, terrainWidth, terrainHeight, 0, 0)
-
-//global terrain as integer
-//terrain = CreateObjectPlane(600,600)
-//RotateObjectGlobalX(terrain,90) 
+//water plane
+terrain = CreateObjectPlane(95,105)
+RotateObjectGlobalX(terrain,90) 
+SetObjectPosition(terrain, -2.5, 5.5, 2.5)
+SetObjectColor( terrain, 0, 0, 255, 255)
 
 // create a directional light (to make the scene look better)
-CreatePointLight(1,-1,-1,1,40,255,255,255)
+//CreatePointLight(1,-1,-1,1,40,255,255,255)
 
 // position and orientate the camera
-SetCameraPosition(1,0,100,-250)
-SetCameraLookAt(1,0,0,0,0)
+camera as integer = 1
+panAngle# = 0
+cameraDistance# = 50
+cameraElevation# = 20
+cameraX# = cameraDistance# * sin(cameraElevation#) * sin(panAngle#)
+cameraY# = cameraDistance# * cos(cameraElevation#)
+cameraZ# = cameraDistance# * sin(cameraElevation#) * cos(panAngle#) 
+cameraLAX# = 0
+cameraLAY# = 0
+cameraLAZ# = 0
 
-memblock = CreateMemblock(160)
+//SetCameraPosition(camera,cameraX#,cameraY#,cameraZ#)
+SetCameraPosition(camera,0,100,-50)
+SetCameraRotation(camera,30,0,0)
 
-//Now we need to fill it with mesh data
-SetMemblockInt(memblock,0,3) //3 vertices
-SetMemblockInt(memblock,4,3) //3 indices, not necissary for simple triangle, but we do it here for completeness
-SetMemblockint(memblock,8,3) //Our mesh has 3 attributes, position, normal, color
-Setmemblockint(memblock,12,28) //number of bytes each vertext takes up. x,y,z,nx,ny,nz,color * 4
-SetMemblockInt(memblock,16,64) //offset to vertex data
-SetMemblockInt(memblock,20,148) //offset to index data
+global pStr as string
+global pStr2 as string
+global pStr3 as string
 
-//Attribute information, I'm combining all bytes into a single int.  
-//   Little endiness means order is string length, normal flag, component count, data type (data will
-//   be written to the MemBlock in reverse order).
-SetMemBlockInt(memblock,24,0x0C000300) //float, 3 components, no normalizing, position
-SetMemblockString(memblock,28,"position") 
-SetMemblockInt(memblock,40,0x08000300) //same as position, but for normals
-SetMemblockString(memblock,44,"normal")
-SetMemblockInt(memblock,52,0x08010401) //For color we have byte, 4 components, normalize data
-SetMemblockString(memblock,56,"color")
-
-//Now we can enter vertex data
-
-Vertex as float[8] = [5.0,-5.0,0.0,-5.0,-5.0,0.0,0.0,5.0,0.0]
-Color as integer[2] = [0xFFFF0000,0xFF00FF00,0xFF0000FF]
-
-for i = 0 to 2
-        SetMemblockFloat(memblock,64+i*28,Vertex[i*3]) //x
-        SetMemblockFloat(memblock,68+i*28,Vertex[i*3+1]) //y
-        SetMemblockFloat(memblock,72+i*28,Vertex[i*3+2]) //z
-        SetMemblockFloat(memblock,76+i*28,0.0) //nx
-        SetMemblockFloat(memblock,80+i*28,0.0) //ny
-        SetMemblockFloat(memblock,84+i*28,-1.0) //nz
-        SetMemblockInt(memblock,88+i*28,Color[i]) //color
-next
- // Now the index data
- SetMemblockInt(memblock,148,0)
- SetMemblockInt(memblock,152,2)
- SetMemblockInt(memblock,156,1)
-        
-//Now to create the object
-triangle = CreateObjectFromMeshMemblock(memblock)
+global image0001 as integer
+image0001=loadImage("grass2.png")
 
 // game loop
+createTerrain(terrainWidth, terrainDepth)//, terrainHeight)
 do
     if GetRawKeyPressed(90) // Z key
 //      Init1DSeeds(terrainWidth)
 //      CreatePerlinNoise1DArray(terrainWidth, terrainBias)
- 		Init2DSeeds(terrainWidth, terrainHeight)
- 		CreatePerlinNoise2DArray(terrainWidth, terrainWidth, terrainBias)
+ 		Init2DSeeds(terrainWidth, terrainDepth)
+ 		CreatePerlinNoise2DArray(terrainWidth, terrainDepth, terrainBias)
+ 		createTerrain(terrainWidth, terrainDepth)//, terrainHeight)
     endif
+    
+    
 //	DrawNoiseArray1D(terrainWidth)
 	//SetRenderToImage (100,0) 
 	//DrawNoiseArray2D(terrainWidth, terrainHeight)
@@ -102,11 +99,80 @@ do
 	//RotateObjectGlobalX(terrain,1)
 	
 	
+// camera pan
+   	// FacingAngle# = GetObjectAngleY(box)+panAngle#
+   	// newCameraX# = ((sin(FacingAngle#)*(180/PI)))
+	// newCameraZ# = -((cos(FacingAngle#)*(180/PI)))
+	// newCameraY# = (GetObjectY(box)/10)+2.8
+//~    if GetRawKeyState(69) > 0 // pan the camera to the right
+//~		panAngle# = panAngle# + 2
+//~		if panAngle# > 360 
+//~			panAngle# = panAngle# - 360 
+//~		elseif panAngle# < 0 
+//~			panAngle# = 360 - panAngle# 	  
+//~		endif
+//~		cameraX# = cameraDistance# * sin(cameraElevation#) * sin(panAngle#)
+//~		cameraY# = cameraDistance# * cos(cameraElevation#)
+//~		cameraZ# = cameraDistance# * sin(cameraElevation#) * cos(panAngle#)        
+//~		SetCameraPosition(camera,cameraX#,cameraY#,cameraZ#)
+//~	//	SetCameraLookAt(camera, 0, 0, 0, 0)
+//~	elseif GetRawKeyState(81) > 0 // pan the camera to the left
+//~		panAngle# = panAngle# - 2
+//~		if panAngle# > 360 
+//~			panAngle# = panAngle# - 360 
+//~		elseif panAngle# < 0 
+//~			panAngle# = 360 - panAngle# 	  
+//~		endif
+//~		cameraX# = cameraDistance# * sin(cameraElevation#) * sin(panAngle#)
+//~		cameraY# = cameraDistance# * cos(cameraElevation#)
+//~		cameraZ# = cameraDistance# * sin(cameraElevation#) * cos(panAngle#)     
+//~		SetCameraPosition(camera,cameraX#,cameraY#,cameraZ#)
+//~	//	SetCameraLookAt(camera, 0, 0, 0, 0)	
+//~	endif			
+	
+	if GetRawKeyState(87) > 0  // w key forward
+		cameraX# = GetCameraX(camera)
+		cameraY# = GetCameraY(camera) 
+		cameraZ# = GetCameraZ(camera) + 1
+		SetCameraPosition(camera, cameraX#, cameraY#, cameraZ#)
+	endif
+	if GetRawKeyState(83) > 0 // s key backward
+		cameraX# = GetCameraX(camera)
+		cameraY# = GetCameraY(camera) 
+		cameraZ# = GetCameraZ(camera) - 1
+		SetCameraPosition(camera, cameraX#, cameraY#, cameraZ#)
+	endif
+	if GetRawKeyState(65) > 0 // a key left
+		cameraX# = GetCameraX(camera) - 1
+		cameraY# = GetCameraY(camera)
+		cameraZ# = GetCameraZ(camera) 
+		SetCameraPosition(camera, cameraX#, cameraY#, cameraZ#)
+	endif
+	if GetRawKeyState(68) > 0 // d key right
+		cameraX# = GetCameraX(camera) + 1
+		cameraY# = GetCameraY(camera)
+		cameraZ# = GetCameraZ(camera) 
+		SetCameraPosition(camera, cameraX#, cameraY#, cameraZ#)
+	endif
+	if GetRawKeyState(82) > 0 // r key up
+		cameraX# = GetCameraX(camera) 
+		cameraY# = GetCameraY(camera) + 1
+		cameraZ# = GetCameraZ(camera) 
+		SetCameraPosition(camera, cameraX#, cameraY#, cameraZ#)
+	endif
+	if GetRawKeyState(70) > 0 // f key down
+		cameraX# = GetCameraX(camera) 
+		cameraY# = GetCameraY(camera) - 1
+		cameraZ# = GetCameraZ(camera) 
+		SetCameraPosition(camera, cameraX#, cameraY#, cameraZ#)
+	endif
+	
+//	Print ( pStr3 + pStr + pStr2 + Str(GetCameraX(camera)) + Str(GetCameraY(camera)) + Str(GetCameraZ(camera)))
  //   Print( ScreenFPS() )
     Sync()
 loop
-
 	
+// example to dump text to screen
 //~	top as integer = 10
 //~ countInc as integer = 10
 //~	for x = 125 to 256
